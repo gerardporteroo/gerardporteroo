@@ -22,9 +22,9 @@ Para enviar un correo: gerard.porteroo@proton.me
 
 ---
 
-## 📚 Educación
+## 📚 Educación destacable
 - **CFGS Administración de Sistemes Informáticos en Redes (ASIX - ASIR)** - Nicolau Copernic (Actual)
-- - **B2-First** - SaltIdiomes (2018)
+- **B2-First** - SaltIdiomes (2018)
 
 ---
 
