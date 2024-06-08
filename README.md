@@ -19,8 +19,6 @@ Actualmente soy un estudiante de administación de sistemas y redes. Soy autodia
 
 Para enviar un correo: gerard.porteroo@proton.me
 
-[Currículum] --> Anclado en la raíz del proyecto
-
 
 ---
 
