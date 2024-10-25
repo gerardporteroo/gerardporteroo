@@ -1,192 +1,213 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio de Ciberseguridad</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Mi Portafolio - Desarrollador Informático</title>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
         }
 
-        .accordion-section {
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            margin-bottom: 1rem;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .accordion-header {
-            background: #ffffff;
-            padding: 1rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            transition: background-color 0.3s ease;
-        }
-
-        .accordion-header:hover {
-            background-color: #f1f5f9;
-        }
-
-        .accordion-header.active {
-            background-color: #f1f5f9;
-        }
-
-        .accordion-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease-out;
-            padding: 0 1rem;
-        }
-
-        .accordion-content.active {
-            max-height: 500px;
-            padding: 1rem;
-        }
-
-        .icon {
-            width: 24px;
-            height: 24px;
-        }
-
-        .main-container {
-            max-width: 800px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-        }
-
-        .header-logo {
-            width: 40px;
-            height: 40px;
-            margin-bottom: 1rem;
-        }
-
-        .profile-container {
+        header {
+            background-color: #282c34;
+            color: white;
+            padding: 20px 0;
             text-align: center;
-            margin-bottom: 2rem;
         }
 
-        .profile-title {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #1a202c;
-            margin-bottom: 0.5rem;
+        header h1 {
+            margin: 0;
         }
 
-        .profile-subtitle {
-            color: #4a5568;
-            font-size: 1.1rem;
+        nav {
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: white;
+            padding: 10px 20px;
+            background-color: #61dafb;
+            margin: 0 10px;
+            border-radius: 5px;
+        }
+
+        section {
+            padding: 50px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #333;
+        }
+
+        .about {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .about img {
+            float: right;
+            width: 150px;
+            border-radius: 50%;
+            margin-left: 20px;
+        }
+
+        .projects {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .project {
+            background-color: white;
+            width: 30%;
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .project img {
+            max-width: 100%;
+            border-radius: 8px;
+        }
+
+        .skills {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
+        .skill {
+            width: 45%;
+            background-color: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .contact {
+            background-color: #61dafb;
+            color: white;
+            text-align: center;
+            padding: 50px 20px;
+            border-radius: 8px;
+        }
+
+        footer {
+            background-color: #282c34;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        @media screen and (max-width: 768px) {
+
+            .project,
+            .skill {
+                width: 100%;
+            }
         }
     </style>
 </head>
+
 <body>
-    <div class="main-container">
-        <div class="profile-container">
-            <img src="https://cdnjs.cloudflare.com/ajax/libs/simple-icons/3.0.1/simpleicons.svg" 
-                 alt="Logo" 
-                 class="header-logo mx-auto">
-            <h1 class="profile-title">[ TU NOMBRE ]</h1>
-            <h2 class="profile-subtitle">Analista de Ciberseguridad & Pentester</h2>
+
+    <header>
+        <h1>Mi Portafolio - Desarrollador Informático</h1>
+        <nav>
+            <a href="#about">Sobre mí</a>
+            <a href="#projects">Proyectos</a>
+            <a href="#skills">Habilidades</a>
+            <a href="#contact">Contacto</a>
+        </nav>
+    </header>
+
+    <section id="about">
+        <h2 class="section-title">Sobre mí</h2>
+        <div class="about">
+            <img src="https://via.placeholder.com/150" alt="Foto de perfil">
+            <p>¡Hola! Soy un desarrollador informático con experiencia en múltiples tecnologías como desarrollo web,
+                aplicaciones móviles y gestión de bases de datos. Mi pasión es crear soluciones tecnológicas eficientes
+                y funcionales. Mi experiencia incluye trabajo en equipos ágiles y el uso de metodologías como Scrum para
+                gestionar proyectos de manera efectiva.</p>
         </div>
+    </section>
 
-        <div class="accordion">
-            <!-- Perfil Section -->
-            <div class="accordion-section">
-                <div class="accordion-header" onclick="toggleAccordion(0)">
-                    <img src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><path d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'/><circle cx='12' cy='7' r='4'/></svg>" 
-                         alt="Perfil" 
-                         class="icon">
-                    <span>Perfil</span>
-                </div>
-                <div class="accordion-content">
-                    <p>Profesional de la ciberseguridad especializado en pentesting y análisis de vulnerabilidades. 
-                    Experiencia en auditorías de seguridad y respuesta a incidentes.</p>
-                </div>
+    <section id="projects">
+        <h2 class="section-title">Proyectos</h2>
+        <div class="projects">
+            <div class="project">
+                <img src="https://via.placeholder.com/300" alt="Proyecto 1">
+                <h3>Proyecto 1</h3>
+                <p>Descripción breve del proyecto 1, una solución web para gestionar inventarios en pequeñas empresas.
+                    Tecnologías: HTML, CSS, JavaScript, Node.js.</p>
             </div>
-
-            <!-- Habilidades Section -->
-            <div class="accordion-section">
-                <div class="accordion-header" onclick="toggleAccordion(1)">
-                    <img src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><path d='M22 11.08V12a10 10 0 1 1-5.93-9.14'/><polyline points='22 4 12 14.01 9 11.01'/></svg>" 
-                         alt="Habilidades" 
-                         class="icon">
-                    <span>Habilidades</span>
-                </div>
-                <div class="accordion-content">
-                    <ul class="list-disc pl-5">
-                        <li>Pentesting</li>
-                        <li>Análisis de Vulnerabilidades</li>
-                        <li>Auditoría de Seguridad</li>
-                        <li>Respuesta a Incidentes</li>
-                        <li>Forensics</li>
-                    </ul>
-                </div>
+            <div class="project">
+                <img src="https://via.placeholder.com/300" alt="Proyecto 2">
+                <h3>Proyecto 2</h3>
+                <p>Descripción breve del proyecto 2, una app móvil para seguimiento de hábitos saludables. Tecnologías:
+                    Kotlin, Firebase, Android Studio.</p>
             </div>
-
-            <!-- Certificaciones Section -->
-            <div class="accordion-section">
-                <div class="accordion-header" onclick="toggleAccordion(2)">
-                    <img src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><path d='M22 12h-4l-3 9L9 3l-3 9H2'/></svg>" 
-                         alt="Certificaciones" 
-                         class="icon">
-                    <span>Certificaciones</span>
-                </div>
-                <div class="accordion-content">
-                    <ul class="list-disc pl-5">
-                        <li>CEH (Certified Ethical Hacker)</li>
-                        <li>OSCP (Offensive Security Certified Professional)</li>
-                        <li>CompTIA Security+</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Proyectos Section -->
-            <div class="accordion-section">
-                <div class="accordion-header" onclick="toggleAccordion(3)">
-                    <img src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><path d='M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z'/></svg>" 
-                         alt="Proyectos" 
-                         class="icon">
-                    <span>Proyectos</span>
-                </div>
-                <div class="accordion-content">
-                    <ul class="list-disc pl-5">
-                        <li>Proyecto 1</li>
-                        <li>Proyecto 2</li>
-                        <li>Proyecto 3</li>
-                    </ul>
-                </div>
+            <div class="project">
+                <img src="https://via.placeholder.com/300" alt="Proyecto 3">
+                <h3>Proyecto 3</h3>
+                <p>Descripción breve del proyecto 3, una plataforma educativa en línea para cursos interactivos.
+                    Tecnologías: PHP, MySQL, Laravel.</p>
             </div>
         </div>
-    </div>
+    </section>
 
-    <script>
-        function toggleAccordion(index) {
-            const accordionHeaders = document.querySelectorAll('.accordion-header');
-            const accordionContents = document.querySelectorAll('.accordion-content');
-            
-            // Toggle active class for clicked section
-            accordionHeaders[index].classList.toggle('active');
-            accordionContents[index].classList.toggle('active');
-            
-            // Close other sections
-            accordionHeaders.forEach((header, i) => {
-                if (i !== index) {
-                    header.classList.remove('active');
-                    accordionContents[i].classList.remove('active');
-                }
-            });
-        }
+    <section id="skills">
+        <h2 class="section-title">Habilidades</h2>
+        <div class="skills">
+            <div class="skill">
+                <h3>Lenguajes de Programación</h3>
+                <p>JavaScript, Python, Java, C#, PHP.</p>
+            </div>
+            <div class="skill">
+                <h3>Desarrollo Web</h3>
+                <p>HTML, CSS, JavaScript, React, Angular, Node.js.</p>
+            </div>
+            <div class="skill">
+                <h3>Bases de Datos</h3>
+                <p>MySQL, PostgreSQL, MongoDB, Firebase.</p>
+            </div>
+            <div class="skill">
+                <h3>Herramientas y Plataformas</h3>
+                <p>Git, Docker, Jenkins, AWS, Azure.</p>
+            </div>
+        </div>
+    </section>
 
-        // Open first section by default
-        document.addEventListener('DOMContentLoaded', () => {
-            toggleAccordion(0);
-        });
-    </script>
+    <section id="contact">
+        <h2 class="section-title">Contacto</h2>
+        <div class="contact">
+            <p>Si deseas contactarme para colaboraciones o nuevas oportunidades, puedes hacerlo a través del siguiente
+                email:</p>
+            <p><strong>correo@ejemplo.com</strong></p>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Mi Portafolio - Todos los derechos reservados.</p>
+    </footer>
+
 </body>
+
 </html>
