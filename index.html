@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Security Dashboard - Portfolio</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: #1a1a1a;
+            color: #ffffff;
+        }
+
+        .navbar {
+            background-color: #2b2b2b;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #00ff9d;
+        }
+
+        .dashboard {
+            padding: 1rem;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            /* Fuerza 3 columnas */
+            gap: 1rem;
+        }
+
+        /* Añade esta media query para hacerlo responsive */
+        @media (max-width: 1200px) {
+            .dashboard {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background-color: #2b2b2b;
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-header {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: #00ff9d;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .metric {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 1rem 0;
+            color: #ffffff;
+        }
+
+        .alert {
+            padding: 0.5rem;
+            margin: 0.5rem 0;
+            border-left: 4px solid;
+            background-color: #363636;
+        }
+
+        .high {
+            border-color: #ff4444;
+        }
+
+        .medium {
+            border-color: #ffbb33;
+        }
+
+        .low {
+            border-color: #00C851;
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .status-item {
+            background-color: #363636;
+            padding: 1rem;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .skill-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.5rem;
+        }
+
+        .skill-item {
+            background-color: #363636;
+            padding: 0.5rem;
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+        }
+
+        .skill-item::before {
+            content: "•";
+            color: #00ff9d;
+            margin-right: 0.5rem;
+        }
+
+        .chart-container {
+            height: 200px;
+            margin-top: 1rem;
+            position: relative;
+        }
+
+        .experience-timeline {
+            margin-top: 1rem;
+        }
+
+        .timeline-item {
+            padding: 0.5rem;
+            margin: 0.5rem 0;
+            border-left: 2px solid #00ff9d;
+            padding-left: 1rem;
+        }
+
+        .timeline-item h4 {
+            color: #00ff9d;
+            margin-bottom: 0.25rem;
+        }
+
+        .timeline-item p {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .certifications-list {
+            margin-top: 1rem;
+        }
+
+        .cert-item {
+            background-color: #363636;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 4px;
+        }
+
+        .tech-category {
+            margin-top: 1rem;
+        }
+
+        .tech-category h4 {
+            color: #00ff9d;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background-color: #363636;
+            border-radius: 4px;
+            margin-top: 0.25rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: #00ff9d;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .animated-chart-container {
+            height: 300px;
+            background-color: #2b2b2b;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .chart-title {
+            color: #00ff9d;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .contact-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .contact-button {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            background-color: #363636;
+            border: none;
+            border-radius: 4px;
+            color: #ffffff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .contact-button:hover {
+            background-color: #404040;
+            transform: translateY(-2px);
+        }
+
+        .copy-tooltip {
+            position: fixed;
+            background-color: #00ff9d;
+            color: #1a1a1a;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .copy-tooltip.show {
+            opacity: 1;
+        }
+
+
+        .skills-row-superior {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 24px;
+            justify-content: center;
+
+            width: 100%;
+            /* Ocupa todo el ancho de la tarjeta */
+            padding: 0px 0;
+
+        }
+
+        .skills-row {
+            display: grid;
+            /* Cambiado a 3 columnas */
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            /* Centra los elementos horizontalmente */
+            justify-content: center;
+            width: 100%;
+            /* Añade algo de espacio arriba y abajo */
+            padding: 0px 0;
+        }
+
+
+        .skill-with-icon-vertical {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            flex: 0 0 auto;
+            min-width: 150px;
+            /* Asegura un ancho mínimo para cada elemento */
+        }
+
+        .tech-icon {
+            /* Podemos hacer los iconos un poco más grandes */
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+        }
+
+        .tech-name {
+            font-size: 0.9rem;
+            /* Tamaño del texto */
+            text-align: center;
+            /* Centra el texto debajo del icono */
+        }
+
+        .progress-bar {
+            height: 8px;
+            background-color: #363636;
+            border-radius: 4px;
+            margin-top: 0.5rem;
+            width: 100%;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: #00ff9d;
+            border-radius: 4px;
+        }
+
+        .metric {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 1rem 0;
+            color: #ffffff;
+        }
+
+        .status-item {
+            background-color: #363636;
+            padding: 1rem;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .chart-container {
+            height: 200px;
+            margin-top: 1rem;
+        }
+
+        /* Estilo para el contenedor de certificaciones */
+        .cert-container {
+            display: flex;
+            /* Establece un contenedor flex */
+            flex-wrap: wrap;
+            /* Permite que los elementos se ajusten a múltiples filas */
+            justify-content: space-between;
+            /* Espacia los elementos */
+        }
+
+        /* Estilo para cada elemento de certificación */
+        .skill-item-SysServices {
+            background-color: #363636;
+            /* Color de fondo para los elementos */
+            padding: 1rem;
+            /* Espaciado interno */
+            margin: 0.5rem;
+            /* Espaciado externo */
+            border-radius: 4px;
+            /* Bordes redondeados */
+            flex: 1 1 calc(33.333% - 1rem);
+            /* Cada columna ocupa un máximo de 1/3 del ancho */
+            box-sizing: border-box;
+            /* Incluye padding y border en el cálculo del ancho */
+            min-width: 0px;
+            /* Anchura mínima para cada elemento (opcional) */
+            text-align: center;
+            /* Centra el texto horizontalmente */
+            display: flex;
+            /* Usar flexbox para el contenido */
+            justify-content: center;
+            /* Centra horizontalmente el contenido */
+            align-items: center;
+            /* Centra verticalmente el contenido */
+            height: 50px;
+            /* Establecer una altura fija para centrar verticalmente (opcional) */
+        }
+
+        .card-redes-com {
+            display: flex;
+            /* Establece un contenedor flex */
+            flex-direction: column;
+            /* Alinea los elementos en columna */
+            justify-content: center;
+            /* Centra el contenido verticalmente */
+            align-items: center;
+            /* Centra el contenido horizontalmente */
+            height: 300px;
+            /* Establece una altura fija para la tarjeta (ajusta según sea necesario) */
+        }
+
+        .chart-container-redes-com {
+            display: flex;
+            /* Establece el contenedor del gráfico como flex */
+            justify-content: center;
+            /* Centra el gráfico horizontalmente */
+            align-items: center;
+            /* Centra el gráfico verticalmente */
+            flex-grow: 1;
+            /* Permite que el contenedor del gráfico ocupe el espacio restante */
+            width: 100%;
+            /* Asegura que el contenedor ocupe el ancho completo */
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="logo">¡Bienvenido a mi portfolio!</div>
+        <div>Last updated: <span id="timestamp"></span></div>
+    </nav>
+    <div class="dashboard">
+        <div class="card">
+            <div class="card-header">Sobre mí</div>
+            <div class="tech-category">
+                <h4>Perfil</h4>
+                <div class="cert-item"> ¡Hola! El portfolio que estás viendo detalla todas mis habilidades adquiridas
+                    hasta el momento. Mi enfoque principal ha sido la administración de sistemas y redes; sin embargo,
+                    busco expandir aún más mis habilidades, y es por ello que me estoy especializando en ciberseguridad
+                    y, paralelamente, aprendiendo Python.</div>
+            </div>
+            <div class="tech-category">
+                <h4>Contacto</h4>
+                <div class="contact-buttons">
+                    <a href="https://www.linkedin.com/in/gerardf-portero" target="_blank" class="contact-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z">
+                            </path>
+                            <rect width="4" height="12" x="2" y="9"></rect>
+                            <circle cx="4" cy="4" r="2"></circle>
+                        </svg>
+                        LinkedIn
+                    </a>
+                    <button class="contact-button" id="copyEmail" data-email="gerard.porteroo@proton.me">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="16" height="13" x="4" y="6" rx="2"></rect>
+                            <path d="m4 10 8 5 8-5"></path>
+                        </svg>
+                        <span id="emailText">gerard.porteroo@proton.me</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Education & Certifications -->
+        <div class="card">
+            <div class="card-header">Educación y Certificaciones</div>
+            <div class="certifications-list">
+                <div class="cert-item">
+                    <h4>CF Especialización en Ciberseguridad</h4>
+                    <p>Institut Tecnològic de Barcelona - Actual</p>
+                </div>
+                <div class="cert-item">
+                    <h4>Python Course</h4>
+                    <p>Udemy - Actual</p>
+                </div>
+                <div class="cert-item">
+                    <h4>CFGS Administración de Sistemas Informáticos en Red</h4>
+                    <p>Nicolau Copernic - 2024</p>
+                </div>
+                <div class="cert-item">
+                    <h4>B2-First</h4>
+                    <p>SaltIdiomes - 2018</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Administration -->
+        <div class="card">
+            <div class="card-header">Infraestructura y Operaciones</div>
+            <div class="tech-category">
+                <h4>Contenedores y Orquestación</h4>
+                <div class="skills-row-superior">
+                    <div class="skill-with-icon-vertical">
+                        <img src="./docker.png" alt="Docker icon" class="tech-icon">
+                        <span class="tech-name">Docker</span>
+                    </div>
+                    <div class="skill-with-icon-vertical">
+                        <img src="./portainer.png" alt="Portainer icon" class="tech-icon">
+                        <span class="tech-name">Portainer</span>
+                    </div>
+                </div>
+            </div>
+            <div class="tech-category">
+                <h4>Cloud & Virtualización</h4>
+                <div class="skills-row">
+                    <div class="skill-with-icon-vertical">
+                        <img src="./aws.png" alt="EC2 icon" class="tech-icon">
+                        <span class="tech-name">EC2</span>
+                    </div>
+                    <div class="skill-with-icon-vertical">
+                        <img src="./tf.png" alt="Terraform icon" class="tech-icon">
+                        <span class="tech-name">Terraform</span>
+                    </div>
+                    <div class="skill-with-icon-vertical">
+                        <img src="./proxmox.png" alt="Proxmox icon" class="tech-icon">
+                        <span class="tech-name">Proxmox</span>
+                    </div>
+                    <div class="skill-with-icon-vertical">
+                        <img src="./vbox.png" alt="Virtual Box icon" class="tech-icon">
+                        <span class="tech-name">Virtual Box</span>
+                    </div>
+                    <div class="skill-with-icon-vertical">
+                        <img src="./vmware.png" alt="VM ware icon" class="tech-icon">
+                        <span class="tech-name">VM Ware</span>
+                    </div>
+                    <div class="skill-with-icon-vertical">
+                        <img src="./hpv.png" alt="Hyper V icon" class="tech-icon">
+                        <span class="tech-name">Hyper V</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Programming & Databases -->
+        <div class="card">
+            <div class="card-header">Redes y Comunicaciones</div>
+            <div style="height: 40px;"></div>
+            <div class="chart-container">
+
+                <canvas id="devChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Network & Security Skills -->
+        <div class="card">
+            <div class="card-header">Seguridad y Monitorización</div>
+            <div class="tech-category">
+                <h4>Seguridad</h4>
+                <div class="skill-item">Sophos</div>
+                <div class="skill-item">pfSense y IPFire</div>
+                <div class="skill-item">Snort y iptables</div>
+                <div class="skill-item">Hacking ético: De Kali a Android (phishing)</div>
+            </div>
+            <div class="tech-category">
+                <h4>Monitorización y Análisis</h4>
+                <div class="skill-item">Zabbix y Grafana</div>
+                <div class="skill-item">Splunk</div>
+            </div>
+        </div>
+
+        <!-- Nivel de conocimiento -->
+        <div class="card">
+            <div class="card-header">Sistemas y Servicios</div>
+            <div class="tech-category">
+                <h4>Administración de Sistemas</h4>
+                <div class="cert-container">
+                    <div class="skill-item-SysServices">Ubuntu</div>
+                    <div class="skill-item-SysServices">Windows y Windows Server</div>
+                    <div class="skill-item-SysServices">PowerShell</div>
+                    <div class="skill-item-SysServices">Scripts</div>
+                    <div class="skill-item-SysServices">Crontab</div>
+                </div>
+            </div>
+
+            <div class="tech-category">
+                <h4>Servicios</h4>
+            </div>
+            <div class="chart-container">
+                <canvas id="networkChart"></canvas>
+            </div>
+        </div>
+
+
+        <!-- Nueva tarjeta: Almacenamiento y Respaldo -->
+        <div class="card">
+            <div class="card-header">Almacenamiento y Respaldo</div>
+            <div class="tech-category">
+                <h4>Gestión de Copias</h4>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 65%;"></div>
+                </div>
+                <p>Veeam: 65%</p>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 75%;"></div>
+                </div>
+                <p>NAS y Cisco: 75%</p>
+            </div>
+            <div class="tech-category">
+                <h4>Servicios de Almacenamiento</h4>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 80%;"></div>
+                </div>
+                <p>ownCloud: 80%</p>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 50%;"></div>
+                </div>
+                <p>DattoRMM: 50%</p>
+
+            </div>
+        </div>
+        <!-- System Activity -->
+        <div class="card">
+            <div class="card-header">Actividad de Sistema</div>
+            <div class="animated-chart-container">
+                <canvas id="animatedChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Skills Distribution -->
+        <div class="card">
+            <div class="card-header">Lenguajes</div>
+            <div class="chart-container">
+                <canvas id="skillsChart"></canvas>
+            </div>
+        </div>
+
+    </div>
+
+    </div>
+
+    <script>
+        // Update timestamp
+        function updateTimestamp() {
+            document.getElementById('timestamp').textContent =
+                new Date().toLocaleString();
+        }
+        updateTimestamp();
+        setInterval(updateTimestamp, 1000);
+
+        // Skills Distribution Chart
+        const skillsCtx = document.getElementById('skillsChart').getContext('2d');
+        new Chart(skillsCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['JAVA', 'Python', 'PHP', 'HTML', 'MongoDB', 'CSS'],
+                datasets: [{
+                    data: [30, 25, 15, 15, 10, 5],
+                    backgroundColor: [
+                        '#007396',
+                        '#FFD700',
+                        '#7B68C4',
+                        '#E44D26',
+                        '#4DB33D',
+                        '#1572B6'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: {
+                            color: '#ffffff'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Development Skills Chart
+        const devCtx = document.getElementById('devChart').getContext('2d');
+        new Chart(devCtx, {
+            type: 'radar',
+            data: {
+                labels: ['NAT & ACLs', 'Servicios Proxy', 'Routers & Switches', 'RIP & OSPF', 'Segmentación de Redes'],
+                datasets: [{
+                    label: 'Nivel de Experiencia',
+                    data: [50, 65, 85, 55, 80],
+                    backgroundColor: 'rgba(0, 255, 157, 0.2)',
+                    borderColor: '#00ff9d',
+                    pointBackgroundColor: '#00ff9d'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            display: false,
+                            color: '#ffffff'
+                        },
+                        grid: {
+                            color: '#363636'
+                        },
+                        pointLabels: {
+                            color: '#ffffff'
+                        }
+                    }
+                }
+            }
+        });
+        // Configuración de la gráfica animada
+        const animatedChartCtx = document.getElementById('animatedChart').getContext('2d');
+        const numberOfPoints = 20;
+        const animationDuration = 12000; // 3 segundos
+
+        // Generar datos aleatorios
+        const labels = Array.from({ length: numberOfPoints }, (_, i) => `${i}:00`);
+        const targetData = Array.from({ length: numberOfPoints }, () => Math.floor(Math.random() * 50) + 30);
+
+        // Configuración de la gráfica
+        const animatedChart = new Chart(animatedChartCtx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Actividad del Sistema',
+                    data: Array(numberOfPoints).fill(null),
+                    borderColor: '#00ff9d',
+                    backgroundColor: 'rgba(0, 255, 157, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 4,
+                    pointBackgroundColor: '#00ff9d'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: {
+                    duration: 0
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: '#363636'
+                        },
+                        ticks: {
+                            color: '#ffffff'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: '#363636'
+                        },
+                        ticks: {
+                            color: '#ffffff'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+
+        // Función de animación
+        let currentPoint = 0;
+        const pointDelay = animationDuration / numberOfPoints;
+
+        function animateChart() {
+            if (currentPoint < numberOfPoints) {
+                animatedChart.data.datasets[0].data[currentPoint] = targetData[currentPoint];
+                animatedChart.update('none');
+                currentPoint++;
+                setTimeout(animateChart, pointDelay);
+            } else {
+                // Reiniciar la animación después de completarse
+                setTimeout(() => {
+                    currentPoint = 0;
+                    animatedChart.data.datasets[0].data = Array(numberOfPoints).fill(null);
+                    animatedChart.update('none');
+                    animateChart();
+                }, 3000); // Espera 2 segundos antes de reiniciar
+            }
+        }
+
+        // Iniciar la animación
+        animateChart();
+        // Funcionalidad de copiado de correo
+        const copyEmailBtn = document.getElementById('copyEmail');
+        let tooltip = null;
+
+        copyEmailBtn.addEventListener('click', async () => {
+            const email = copyEmailBtn.dataset.email;
+
+            try {
+                await navigator.clipboard.writeText(email);
+
+                // Crear y mostrar tooltip
+                if (!tooltip) {
+                    tooltip = document.createElement('div');
+                    tooltip.className = 'copy-tooltip';
+                    document.body.appendChild(tooltip);
+                }
+
+                tooltip.textContent = '¡Copiado al portapapeles!';
+                tooltip.classList.add('show');
+
+                // Posicionar tooltip cerca del botón
+                const btnRect = copyEmailBtn.getBoundingClientRect();
+                tooltip.style.top = `${btnRect.bottom + 10}px`;
+                tooltip.style.left = `${btnRect.left + (btnRect.width - tooltip.offsetWidth) / 2}px`;
+
+                // Ocultar tooltip después de 2 segundos
+                setTimeout(() => {
+                    tooltip.classList.remove('show');
+                }, 2000);
+            } catch (err) {
+                console.error('Error al copiar:', err);
+            }
+        });
+
+        // Limpiar tooltip al desplazar
+        window.addEventListener('scroll', () => {
+            if (tooltip) {
+                tooltip.classList.remove('show');
+            }
+        });
+        const networkCtx = document.getElementById('networkChart').getContext('2d');
+        new Chart(networkCtx, {
+            type: 'bar',
+            data: {
+                labels: ['NGINX', 'Apache2', 'Correo', 'DNS', 'MySQL', 'Redmine'], // Etiquetas del eje X
+                datasets: [{
+                    label: 'Nivel de Conocimiento',
+                    data: [65, 75, 95, 75, 60, 80], // Representamos los valores de habilidad
+                    backgroundColor: '#00ff9d'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: '#363636'
+                        },
+                        ticks: {
+                            color: '#ffffff',
+                            // Definimos las etiquetas que queremos mostrar
+                            callback: function (value) {
+                                if (value === 90) return 'Avanzado';
+                                if (value === 50) return 'Intermedio';
+                                if (value === 10) return 'Principiante';
+                                return ''; // Para otros valores, no se muestra nada
+                            }
+                        },
+                        // Establecemos los valores mínimos y máximos
+                        min: 0,
+                        max: 100,
+                        title: {
+                            display: true,
+                            text: 'Nivel de Conocimiento', // Título opcional para el eje Y
+                            align: 'center', // Alineación del título
+                            padding: {
+                                top: 0,
+                                bottom: 0
+                            },
+                            // Puedes ajustar la posición aquí
+                            font: {
+                                size: 16, // Tamaño de la fuente
+                                weight: 'bold' // Peso de la fuente
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: '#363636'
+                        },
+                        ticks: {
+                            color: '#ffffff'
+                        }
+                    }
+                }
+            }
+        });
+
+    </script>
+</body>
+
+</html>
